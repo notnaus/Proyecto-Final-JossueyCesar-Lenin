@@ -46,7 +46,7 @@ public class g1_administrador extends g1_persona {
         String menu[] = {
             "Menu principal de administrador",
             "1. Agregar cliente",
-            "2. Agregar cajero",
+            "2. Agregar tramitador",
             "3. Consultar cliente",
             "4. Consultar cajero",
             "5. Eliminar usuario del sistema",
@@ -98,9 +98,9 @@ public class g1_administrador extends g1_persona {
                         do{
                             try{
                                 JOptionPane.showMessageDialog(null,
-                                    buscarCajero(
+                                    buscartramitador(
                                             Integer.parseInt(JOptionPane.showInputDialog(
-                                            null, "Id del cajero a buscar:")),
+                                            null, "Id del tramitador a buscar:")),
                                             sistemaCC ));
                                 continuar = false;
                             }catch(NumberFormatException e){
@@ -152,11 +152,11 @@ public class g1_administrador extends g1_persona {
             } 
         }
     }
-    private String buscarCajero(int id, ArrayList dbUsuarios){
+    private String buscartramitador(int id, ArrayList dbUsuarios){
         for(int i = 0 ; i<dbUsuarios.size();i++){
             g1_usuario u = (g1_usuario)dbUsuarios.get(i);
-            if (u instanceof g1_cajero){
-                g1_cajero c = (g1_cajero)u;
+            if (u instanceof g1_tramitador){
+                g1_tramitador c = (g1_tramitador)u;
                 if (c.getId()==id){
                     return (c.toString());
                 } 
@@ -252,13 +252,13 @@ public class g1_administrador extends g1_persona {
     }
     private void crearCajero(){
         boolean continuar;
-        g1_cajero c = new g1_cajero();
+        g1_tramitador c = new g1_tramitador();
         
         continuar = true;
         do{
             try{
                 c.setId(Integer.parseInt(JOptionPane.showInputDialog(
-                        null, "Id del cajero")));
+                        null, "Id del tramitador")));
                 continuar = false;
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null,"Debe ingresar un entero");
@@ -300,7 +300,7 @@ public class g1_administrador extends g1_persona {
         do{
             try{
                 c.setNombre(JOptionPane.showInputDialog(
-                    null, "Nombre cajero"));
+                    null, "Nombre tramitador"));
                 if(c.getNombre().length()<4){
                     JOptionPane.showMessageDialog(null,"El largo minimo es de 4 caracteres");
                 }else{

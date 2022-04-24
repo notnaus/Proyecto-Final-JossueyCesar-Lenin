@@ -1,3 +1,1 @@
-1,1,patodonald,118270487,Jossue,3500.0
-1,2,rokefeler,125653265,Rokefeler,20000.0
-2,201,cajerocalve,1254546546,Pablo,c1
+2,302,123456,502350222,juan,b3

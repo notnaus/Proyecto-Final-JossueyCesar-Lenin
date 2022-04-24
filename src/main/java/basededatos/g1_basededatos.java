@@ -4,7 +4,7 @@
  */
 package basededatos;
 
-import clases.g1_cajero;
+import clases.g1_tramitador;
 import clases.g1_cliente;
 import clases.g1_movimiento;
 import clases.g1_realizacion_movimiento;
@@ -22,6 +22,8 @@ import java.util.Scanner;
  * @author josrm
  */
 public class g1_basededatos {
+
+    private static g1_usuario tramitador;
     public static void crearArchivoUsuarios(ArrayList<g1_usuario> sistemaCC) {
         FileWriter fw = null;
         try {
@@ -38,14 +40,14 @@ public class g1_basededatos {
                         +cliente.getNombre()+","
                         +cliente.getSaldo()+"\n";
                     bf.write(salida);
-                }else if(usuario instanceof g1_cajero){
-                    g1_cajero cajero = (g1_cajero)usuario;
-                    salida =cajero.getTipo()+"," 
-                        +cajero.getId()+","
-                        +cajero.getClave()+","
-                        +cajero.getCedula()+","
-                        +cajero.getNombre()+","
-                        +cajero.getCodEmpleado()+"\n";
+                }else if(usuario instanceof g1_tramitador){
+                    g1_tramitador g1_tr = (g1_tramitador)usuario;
+                    salida =g1_tr.getTipo()+"," 
+                        +g1_tr.getId()+","
+                        +g1_tr.getClave()+","
+                        +g1_tr.getCedula()+","
+                        +g1_tr.getNombre()+","
+                        +g1_tr.getCodEmpleado()+"\n";
                     bf.write(salida);
                 }  
             }
@@ -84,14 +86,14 @@ public class g1_basededatos {
                     cliente.setSaldo(Double.parseDouble(delimitar.next())); 
                     dbUsuarios.add(cliente);
                 }else if(tipoUsuario == 2){
-                    g1_cajero cajero = new g1_cajero();
+                    g1_tramitador cajero = new g1_tramitador();
                     cajero.setTipo(tipoUsuario);
                     cajero.setId(Integer.parseInt(delimitar.next()));
                     cajero.setClave(delimitar.next());
                     cajero.setCedula(delimitar.next());
                     cajero.setNombre(delimitar.next());
                     cajero.setCodEmpleado(delimitar.next()); 
-                    dbUsuarios.add(cajero);
+                    dbUsuarios.add(tramitador);
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -118,7 +120,7 @@ public class g1_basededatos {
                             + movimientoR.getIdCliente() +","
                             + movimientoR.getTipo() +","
                             + movimientoR.getMonto() +","
-                            + movimientoR.getIdCajero() +","
+                            + movimientoR.getIdtramitador() +","
                             + movimientoR.getFechaRealizado() +"\n";
                 }else{
                     salida = movimiento.getEstado()+","
