@@ -43,10 +43,10 @@ public class g1_realizacion_movimiento extends g1_movimiento {
         String tipo="";
         String estado="";
         switch(getTipo()){
-            case 1: tipo = "Deposito - Abono a la cuenta";break;
-            case 2: tipo = "Transferencia local - Nota de debito";break;
-            case 3: tipo = "Trasferencia otros bancos";break;
-            case 4: tipo = "Retiro de dinero - Nota de credito";break;
+            case 1: tipo = "Abono a la cuenta";break;
+            case 2: tipo = "Nota de Credito";break;
+            case 3: tipo = "Trasferencia otros bancos--- no sirve";break;
+            case 4: tipo = "Retiro de dinero - Nota de credito--este??";break;
         }
         switch(getEstado()){
             case 0: estado = "Pendiente";break;

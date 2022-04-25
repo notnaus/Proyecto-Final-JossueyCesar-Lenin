@@ -63,7 +63,7 @@ public class g1_cliente extends g1_persona {
         this.cliente = (g1_cliente)u;
         String menu[] = {
             "Menu principal de cliente",
-            "1. Realizar Movimiento Bancario",
+            "1. Realizar Transaccion",
             "2. Modificar perfil",
             "3. Consultar movimientos",
             "0. Salir del sistema"
@@ -170,7 +170,7 @@ public class g1_cliente extends g1_persona {
         String menu[] = {
             "Seleccione el movimiento a realizar",
             "1. Realizar deposito - Abono en cuenta ",
-            "2. Realizar transferencia local - Nota de Debito - hacerlo - subirle el precio",
+            "2. Nota de credito",
             "3. Realizar transferencia otros bancos - Restarle al monto inicial credito - pedir rebajo",
             "4. Realizar retiro de dinero --- Abono a la cuenta ",
             "0. Volver al menu principal"
@@ -204,7 +204,7 @@ public class g1_cliente extends g1_persona {
                     if(m.getTipo()>1 && m.getTipo()<5){
                         if (m.getMonto()>cliente.getSaldo()){
                             JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
-                                    + "El monto es superior al contenido en el banco\n"
+                                    + "El monto es superior\n"
                                     + "Verifique con el Tramitador si existen movimientos pendientes de aplicar");
                         }else{
                             int sel = JOptionPane.showConfirmDialog(null, m.toString()+"\n\n"
