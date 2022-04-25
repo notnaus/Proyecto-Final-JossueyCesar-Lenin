@@ -62,7 +62,7 @@ public class g1_tramitador extends g1_persona {
         this.Tramitador = (g1_tramitador)u;
         String menu[] = {
             "Menu principal de Tramitador",
-            "1. Verificar listado de transacciones",
+            "1. Verificar listado de Movimientos",
             "2. Consultar movimientos de un cliente",
             "3. Modificar perfil",
             "0. Salir del sistema"
@@ -156,7 +156,7 @@ public class g1_tramitador extends g1_persona {
                     if(m.getTipo()>1 && m.getTipo()<5){
                         if (m.getMonto()>c.getSaldo()){
                             JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
-                                    + "El monto es superior al contenido en el banco\n"
+                                    + "El monto es superior\n"
                                     + "Posibilidad de varias solicides realizadas");
                         }else{
                             g1_realizacion_movimiento mR = new g1_realizacion_movimiento();

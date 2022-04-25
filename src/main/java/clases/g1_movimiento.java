@@ -74,7 +74,7 @@ public class g1_movimiento {
         String estado="";
         switch(getTipo()){
             case 1: tipo = "Deposito - Abono a la cuenta";break;
-            case 2: tipo = "Transferencia local - Nota de debito";break;
+            case 2: tipo = "Nota de Credito";break;
             case 3: tipo = "Trasferencia otros bancos";break;
             case 4: tipo = "Retiro de dinero - Nota de credito";break;
         }
@@ -118,7 +118,7 @@ public class g1_movimiento {
             g1_movimiento temporal = (g1_movimiento)Movimientos.get(i);
             switch(temporal.getTipo()){
                 case 1: tipo = "Deposito - Abono a la cuenta";break;
-                case 2: tipo = "Transferencia local - Nota de debito";break;
+                case 2: tipo = "Nota de Credito";break;
                 case 3: tipo = "Trasferencia otros bancos";break;
                 case 4: tipo = "Retiro de dinero - Nota de credito";break;
             }
@@ -152,7 +152,7 @@ public class g1_movimiento {
                 indice++;
                 switch(temporal.getTipo()){
                 case 1: tipo = "Deposito - Abono a cuenta";break;
-                case 2: tipo = "Transferencia local - Nota de debito";break;
+                case 2: tipo = "Nota de Credito";break;
                 case 3: tipo = "Trasferencia otros bancos - No vale";break;
                 case 4: tipo = "Retiro de dinero - Nota de Credito";break;
                 }
