@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import basededatos.g1_basededatos;
 
+
 /**
  *
  * @author josrm
@@ -17,7 +18,7 @@ import basededatos.g1_basededatos;
 public class g1_tramitador extends g1_persona {
     private String codEmpleado;
     g1_tramitador Tramitador;
-
+    
     public g1_tramitador(String codEmpleado, String cedula, String nombre, int id, String clave, int tipo) {
         super(cedula, nombre, id, clave, tipo);
         this.codEmpleado = codEmpleado;
@@ -65,6 +66,7 @@ public class g1_tramitador extends g1_persona {
             "1. Verificar listado de Movimientos",
             "2. Consultar movimientos de un cliente",
             "3. Modificar perfil",
+            "4. Generar Nota de Debito",
             "0. Salir del sistema"
         };
         int op= -1;
@@ -96,6 +98,10 @@ public class g1_tramitador extends g1_persona {
                         modificarPerfil();
                         break;
                     }
+                    case 4:{
+                        creaNotadeDebito();
+                        break;
+                    }
                 }
             }catch (NumberFormatException e){
                 JOptionPane.showMessageDialog(null,
@@ -123,6 +129,7 @@ public class g1_tramitador extends g1_persona {
                     salida+=g1_movimiento.mostarListaMovimientosCliente(dbMovimientos, cliente.getCedula());
                     System.out.println(salida);
                     JOptionPane.showMessageDialog(null, salida);
+                    
                 }else{
                     JOptionPane.showMessageDialog(null,"Cliente no registrado");
                 }  
@@ -135,9 +142,133 @@ public class g1_tramitador extends g1_persona {
             JOptionPane.showMessageDialog(null,"Ha seleccionado un elemento no disponible");
         }
     }
-    private void mostarTransaccionesPendientes(){
+    
+    private void creaNotadeDebito(){
+        int sel = Integer.parseInt(JOptionPane.showInputDialog(null,
+                    "Id del cliente a consultar"));
+        g1_usuario u = g1_usuario.getUsuario(sistemaCC, sel);
+        g1_cliente ar = (g1_cliente)u;
+        try{
+            
+       
+            if (u instanceof g1_cliente){
+                
+                if (ar!=null){
+                    String salida = ar.toString();
+                    salida+=g1_movimiento.mostarListaMovimientosCliente(dbMovimientos, ar.getCedula());
+                    System.out.println(salida);
+                    JOptionPane.showMessageDialog(null, salida);
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null,"Cliente no registrado");
+                }  
+            }else{
+                JOptionPane.showMessageDialog(null,"Cliente no registrado");
+            }
+        }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null,"Debe ingresar un valor entero");
+        }catch(IndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(null,"Ha seleccionado un elemento no disponible");
+        }
+        
+        
+
+
+        //proceso de creacion de la nota
+        String menu[] = {
+            "Crear nota de debito",
+            "3. Nota de debito",
+            "0. Volver al menu principal"
+        };
+        int op= -1;
+        do
+        { 
+            try{
+                op = Integer.parseInt(JOptionPane.showInputDialog(null,
+                        menu,
+                        "Menu Principal", 
+                        JOptionPane.QUESTION_MESSAGE));
+                
+                if(op!=0 && op<5){
+                    g1_movimiento m = new g1_movimiento();
+                    m.setTipo(op);
+                    
+                    
+                    m.setIdCliente(ar.getCedula());
+                    m.setEstado(0);
+                    m.setId(calcularIdentificador());
+                    boolean continuar = true;
+                    do{
+                        try{
+                            
+                                 m.setMonto(Double.parseDouble(JOptionPane.showInputDialog(
+                                    null, "Monto del movimiento:")) + m.getMonto());
+                                  continuar = false;
+             
+                            
+                        }catch(NumberFormatException e){
+                            JOptionPane.showMessageDialog(null,"Debe ingresar un valor numerico");
+                        }
+                    }while (continuar);
+                    System.out.println(m.getTipo());
+                    
+                    
+                    if(m.getTipo()>1 && m.getTipo()<5){
+                        if (m.getMonto()>ar.getSaldo()){
+                            JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
+                                    + "El monto es superior\n"
+                                    + "Verifique con el Tramitador si existen movimientos pendientes de aplicar");
+                        }else{
+                            int sela = JOptionPane.showConfirmDialog(null, m.toString()+"\n\n"
+                            + "Desea solicitar el movimiento", "Confirmacion", 0);
+                            if(sela==0){
+                                dbMovimientos.add(m);
+                                JOptionPane.showMessageDialog(null,"Movimiento solicitado");
+                            }else{
+                                JOptionPane.showMessageDialog(null,"Movimiento descartado");
+                            }
+                        }
+                    }else{
+                         int sela = JOptionPane.showConfirmDialog(null, m.toString()+"\n\n"
+                            + "Desea solicitar el movimiento", "Confirmacion", 0);
+                        if(sel==0){
+                            dbMovimientos.add(m);
+                            JOptionPane.showMessageDialog(null,"Movimiento solicitado");
+                        }else{
+                            JOptionPane.showMessageDialog(null,"Movimiento descartado");
+                        }
+                    }
+                }
+            }catch (NumberFormatException e){
+                JOptionPane.showMessageDialog(null,
+                    "Menu Principal\n"
+                        + "Error de formato de numero: "+e.toString(),
+                    "Informacion",JOptionPane.OK_OPTION);
+            }catch(NullPointerException e){
+                JOptionPane.showMessageDialog(null,
+                    "Menu Principal\n"
+                        + "Compra cancelada: "+e.toString(),
+                    "Informacion",JOptionPane.OK_OPTION);
+            }
+        }while (op!=0); 
+    }
+    
+    private int calcularIdentificador(){
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        int day = now.getDayOfMonth();
+        int hour = now.getHour();
+        int minute = now.getMinute();
+        int second = now.getSecond();
+        int millis = now.get(ChronoField.MILLI_OF_SECOND);
+        int ide = year+month+day+hour+minute+second+millis;
+        return ide;
+    }
+    
+    public void mostarTransaccionesPendientes(){
         ArrayList<g1_movimiento> pendientes = 
-                g1_movimiento.listaMovimientosPendientes(dbMovimientos);
+                g1_movimiento.listaMovimientosPendientesTramitador(dbMovimientos);
         boolean continuar = true;
         do{
             try{
@@ -154,11 +285,27 @@ public class g1_tramitador extends g1_persona {
                         "Seleccione el movimiento a aplicar",0);
                 if(sel == 0){
                     if(m.getTipo()>1 && m.getTipo()<5){
-                        if (m.getMonto()>c.getSaldo()){
-                            JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
-                                    + "El monto es superior\n"
-                                    + "Posibilidad de varias solicides realizadas");
-                        }else{
+                        
+                        if(m.getTipo() == 3){
+                            JOptionPane.showMessageDialog(null,"Escogio NOTA DE DEBITO\n");
+                            g1_realizacion_movimiento mR = new g1_realizacion_movimiento();
+                            mR.setId(m.getId());
+                            mR.setIdCliente(m.getIdCliente());
+                            mR.setTipo(m.getTipo());
+                            mR.setMonto(m.getMonto());
+                            mR.setEstado(1);
+                            mR.setIdTramitador(codEmpleado);
+                            mR.setFechaRealizado(momento());
+                            g1_movimiento.actualizarMovimiento(dbMovimientos, mR);
+                            c.setSaldo((c.getSaldo()+m.getMonto()));
+                            g1_usuario.actualizarUsuario(sistemaCC, c);  
+                            JOptionPane.showMessageDialog(null, mR.toString()+"\n"
+                                    + "Aplicacion terminada");
+                             
+                        }
+                        
+                        if(m.getTipo() == 1 || m.getTipo() == 2 ){
+                        
                             g1_realizacion_movimiento mR = new g1_realizacion_movimiento();
                             mR.setId(m.getId());
                             mR.setIdCliente(m.getIdCliente());
@@ -172,21 +319,7 @@ public class g1_tramitador extends g1_persona {
                             g1_usuario.actualizarUsuario(sistemaCC, c);  
                             JOptionPane.showMessageDialog(null, mR.toString()+"\n"
                                     + "Aplicacion terminada");
-                        } 
-                    }else{
-                        g1_realizacion_movimiento mR = new g1_realizacion_movimiento();
-                            mR.setId(m.getId());
-                            mR.setIdCliente(m.getIdCliente());
-                            mR.setTipo(m.getTipo());
-                            mR.setMonto(m.getMonto());
-                            mR.setEstado(1);
-                            mR.setIdTramitador(codEmpleado);
-                            mR.setFechaRealizado(momento());
-                            g1_movimiento.actualizarMovimiento(dbMovimientos, mR);
-                            c.setSaldo((c.getSaldo()+m.getMonto()));
-                            g1_usuario.actualizarUsuario(sistemaCC, c);  
-                            JOptionPane.showMessageDialog(null, mR.toString()+"\n"
-                                    + "Aplicacion terminada");
+                        }
                     }
                 }else{
                     JOptionPane.showMessageDialog(null,"No se ha aplicado el movimiento");
@@ -201,6 +334,7 @@ public class g1_tramitador extends g1_persona {
         
         
     }
+    
     private void modificarPerfil(){
         int sel = JOptionPane.showConfirmDialog(null, Tramitador.toString()+"\n\n"
             + "Desea Modificar sus datos personales?", "Confirmacion", 0);
