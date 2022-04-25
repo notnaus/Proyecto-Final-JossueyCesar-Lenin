@@ -86,7 +86,7 @@ public class g1_usuario {
             g1_persona temporal =(g1_persona) sistemaCC.get(i);
             switch(temporal.getTipo()){
                 case 1: tipo = "Cliente";break;
-                case 2: tipo = "Cajero";break;
+                case 2: tipo = "Tramitador";break;
             }
             salida += String.format("%10s %15s %40s %20s\n", 
                     temporal.getId(),

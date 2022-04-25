@@ -170,9 +170,9 @@ public class g1_cliente extends g1_persona {
         String menu[] = {
             "Seleccione el movimiento a realizar",
             "1. Realizar deposito - Abono en cuenta ",
-            "2. Realizar transferencia local - Nota de Debito",
-            "3. Realizar transferencia otros bancos - No vale",
-            "4. Realizar retiro de dinero - Nota de credito ",
+            "2. Realizar transferencia local - Nota de Debito - hacerlo - subirle el precio",
+            "3. Realizar transferencia otros bancos - Restarle al monto inicial credito - pedir rebajo",
+            "4. Realizar retiro de dinero --- Abono a la cuenta ",
             "0. Volver al menu principal"
         };
         int op= -1;
@@ -205,7 +205,7 @@ public class g1_cliente extends g1_persona {
                         if (m.getMonto()>cliente.getSaldo()){
                             JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
                                     + "El monto es superior al contenido en el banco\n"
-                                    + "Verifique con el cajero si existen movimientos pendientes de aplicar");
+                                    + "Verifique con el Tramitador si existen movimientos pendientes de aplicar");
                         }else{
                             int sel = JOptionPane.showConfirmDialog(null, m.toString()+"\n\n"
                             + "Desea solicitar el movimiento", "Confirmacion", 0);
