@@ -9,25 +9,25 @@ package clases;
  * @author josrm
  */
 public class g1_realizacion_movimiento extends g1_movimiento {
-    private String idCajero;
+    private String idTramitador;
     private String fechaRealizado;
 
     public g1_realizacion_movimiento() {
     }
 
-    public g1_realizacion_movimiento(String idCajero, String fechaRealizado, int id, String idCliente, int tipo, double monto, int estado) {
+    public g1_realizacion_movimiento(String idTramitador, String fechaRealizado, int id, String idCliente, int tipo, double monto, int estado) {
         super(id, idCliente, tipo, monto, estado);
-        this.idCajero = idCajero;
+        this.idTramitador = idTramitador ;
         this.fechaRealizado = fechaRealizado;
     }
     
     
-    public String getIdCajero() {
-        return idCajero;
+    public String getIdTramitador() {
+        return idTramitador;
     }
 
-    public void setIdCajero(String idCajero) {
-        this.idCajero = idCajero;
+    public void setIdTramitador(String idTramitador) {
+        this.idTramitador = idTramitador;
     }
 
     public String getFechaRealizado() {
@@ -57,7 +57,7 @@ public class g1_realizacion_movimiento extends g1_movimiento {
                 + "Monto: "+getMonto()+"\n"
                 + "Tipo: "+tipo+"\n"
                 + "Estado: "+estado+"\n"
-                + "Id Cajero:" + idCajero +"\n"
+                + "Id Tramitador:" + idTramitador +"\n"
                 + "Fecha Aplicacion: "+fechaRealizado;
         return salida;         
     } 

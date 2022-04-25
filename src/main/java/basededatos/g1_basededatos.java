@@ -4,7 +4,7 @@
  */
 package basededatos;
 
-import clases.g1_cajero;
+import clases.g1_tramitador;
 import clases.g1_cliente;
 import clases.g1_movimiento;
 import clases.g1_realizacion_movimiento;
@@ -38,14 +38,14 @@ public class g1_basededatos {
                         +cliente.getNombre()+","
                         +cliente.getSaldo()+"\n";
                     bf.write(salida);
-                }else if(usuario instanceof g1_cajero){
-                    g1_cajero cajero = (g1_cajero)usuario;
-                    salida =cajero.getTipo()+"," 
-                        +cajero.getId()+","
-                        +cajero.getClave()+","
-                        +cajero.getCedula()+","
-                        +cajero.getNombre()+","
-                        +cajero.getCodEmpleado()+"\n";
+                }else if(usuario instanceof g1_tramitador){
+                    g1_tramitador Tr = (g1_tramitador)usuario;
+                    salida =Tr.getTipo()+"," 
+                        +Tr.getId()+","
+                        +Tr.getClave()+","
+                        +Tr.getCedula()+","
+                        +Tr.getNombre()+","
+                        +Tr.getCodEmpleado()+"\n";
                     bf.write(salida);
                 }  
             }
@@ -84,14 +84,14 @@ public class g1_basededatos {
                     cliente.setSaldo(Double.parseDouble(delimitar.next())); 
                     dbUsuarios.add(cliente);
                 }else if(tipoUsuario == 2){
-                    g1_cajero cajero = new g1_cajero();
-                    cajero.setTipo(tipoUsuario);
-                    cajero.setId(Integer.parseInt(delimitar.next()));
-                    cajero.setClave(delimitar.next());
-                    cajero.setCedula(delimitar.next());
-                    cajero.setNombre(delimitar.next());
-                    cajero.setCodEmpleado(delimitar.next()); 
-                    dbUsuarios.add(cajero);
+                    g1_tramitador Tr = new g1_tramitador();
+                    Tr.setTipo(tipoUsuario);
+                    Tr.setId(Integer.parseInt(delimitar.next()));
+                    Tr.setClave(delimitar.next());
+                    Tr.setCedula(delimitar.next());
+                    Tr.setNombre(delimitar.next());
+                    Tr.setCodEmpleado(delimitar.next()); 
+                    dbUsuarios.add(Tr);
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -118,7 +118,7 @@ public class g1_basededatos {
                             + movimientoR.getIdCliente() +","
                             + movimientoR.getTipo() +","
                             + movimientoR.getMonto() +","
-                            + movimientoR.getIdCajero() +","
+                            + movimientoR.getIdTramitador() +","
                             + movimientoR.getFechaRealizado() +"\n";
                 }else{
                     salida = movimiento.getEstado()+","
@@ -162,7 +162,7 @@ public class g1_basededatos {
                     movimiento.setIdCliente(delimitar.next());
                     movimiento.setTipo(Integer.parseInt(delimitar.next()));
                     movimiento.setMonto(Double.parseDouble(delimitar.next()));
-                    movimiento.setIdCajero(delimitar.next());
+                    movimiento.setIdTramitador(delimitar.next());
                     movimiento.setFechaRealizado(delimitar.next()); 
                     dbMovimientos.add(movimiento);
                 }else{
