@@ -169,10 +169,8 @@ public class g1_cliente extends g1_persona {
     private void realizarMovimiento(){
         String menu[] = {
             "Seleccione el movimiento a realizar",
-            "1. Realizar deposito - Abono en cuenta ",
-            "2. Nota de credito",
-            "3. Realizar transferencia otros bancos - Restarle al monto inicial credito - pedir rebajo",
-            "4. Realizar retiro de dinero --- Abono a la cuenta ",
+            "1. Nota de credito",
+            "2. Abono a la cuenta ",
             "0. Volver al menu principal"
         };
         int op= -1;
@@ -201,6 +199,8 @@ public class g1_cliente extends g1_persona {
                         }
                     }while (continuar);
                     System.out.println(m.getTipo());
+                    
+                    
                     if(m.getTipo()>1 && m.getTipo()<5){
                         if (m.getMonto()>cliente.getSaldo()){
                             JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
@@ -240,6 +240,10 @@ public class g1_cliente extends g1_persona {
             }
         }while (op!=0); 
     }
+    
+    
+    
+    
      private int calcularIdentificador(){
         LocalDateTime now = LocalDateTime.now();
         int year = now.getYear();

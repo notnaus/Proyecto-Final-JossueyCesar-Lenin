@@ -6,7 +6,8 @@ package clases;
 import basededatos.g1_basededatos;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 
 /**
  *
@@ -51,6 +52,7 @@ public class g1_administrador extends g1_persona {
             "4. Consultar Tramitador",
             "5. Eliminar usuario del sistema",
             "6. Listar usuarios del sistema",
+            "7. Aprobar transacciones pendientes ",
             "0. Salir del sistema"
         };
         int op= -1;
@@ -128,6 +130,10 @@ public class g1_administrador extends g1_persona {
                     case 6: {
                         System.out.println(g1_usuario.listarUsuariosSistema(sistemaCC));
                         JOptionPane.showMessageDialog(null,g1_usuario.listarUsuariosSistema(sistemaCC));
+                    }
+                    case 7: {
+                        mostarTransaccionesPendientes();
+                        break;
                     }
                 }
             }catch (NumberFormatException e){
@@ -241,7 +247,7 @@ public class g1_administrador extends g1_persona {
         do{
             try{
                 c.setSaldo(Double.parseDouble(JOptionPane.showInputDialog(
-                        null, "Saldo inicial de la cuenta:")));
+                        null, "Monto que debe a los polacos:")));
                 continuar = false;
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null,"Debe ingresar un valor numerico");
@@ -326,5 +332,96 @@ public class g1_administrador extends g1_persona {
         }while (continuar);
         c.setTipo(2);
         sistemaCC.add(c);
+    }
+    
+     public void mostarTransaccionesPendientes(){
+        ArrayList<g1_movimiento> pendientes = 
+                g1_movimiento.listaMovimientosPendientes(dbMovimientos);
+        boolean continuar = true;
+        do{
+            try{
+                System.out.println(g1_movimiento.mostarListaMovimientos(pendientes));
+                int sel = Integer.parseInt(JOptionPane.showInputDialog(null, 
+                    g1_movimiento.mostarListaMovimientos(pendientes)+"\n"
+                    + "Seleccione la transaccion a aplicar"));
+                g1_movimiento m = pendientes.get((sel-1));
+                g1_cliente c = (g1_cliente)g1_usuario.getUsuario(sistemaCC, m.getIdCliente());
+                
+                sel = JOptionPane.showConfirmDialog(null,"Cliente: "+c.getNombre()+"\n\n"+ 
+                        m.toString()+"\n" 
+                        + "Desea aplicar este movimiento",
+                        "Seleccione el movimiento a aplicar",0);
+                if(sel == 0){
+                    if(m.getTipo()>1 && m.getTipo()<5){
+                        if(m.getTipo()==1){
+                        
+                            if (m.getMonto()>c.getSaldo()){
+                            JOptionPane.showMessageDialog(null,"Movimiento no permitido\n"
+                                    + "El monto es superior\n"
+                                    + "Posibilidad de varias solicides realizadas");
+                        }else{
+                            g1_realizacion_movimiento mR = new g1_realizacion_movimiento();
+                            mR.setId(m.getId());
+                            mR.setIdCliente(m.getIdCliente());
+                            mR.setTipo(m.getTipo());
+                            mR.setMonto(m.getMonto());
+                            mR.setEstado(1);
+                            mR.setIdTramitador("a");
+                            mR.setFechaRealizado(momento());
+                            g1_movimiento.actualizarMovimiento(dbMovimientos, mR);
+                            c.setSaldo((c.getSaldo()-m.getMonto()));
+                            g1_usuario.actualizarUsuario(sistemaCC, c);  
+                            JOptionPane.showMessageDialog(null, mR.toString()+"\n"
+                                    + "Aplicacion terminada");
+                        } 
+                        }
+
+                    }else if(m.getTipo()==2){
+                            g1_realizacion_movimiento mR = new g1_realizacion_movimiento();
+                            mR.setId(m.getId());
+                            mR.setIdCliente(m.getIdCliente());
+                            mR.setTipo(m.getTipo());
+                            mR.setMonto(m.getMonto());
+                            mR.setEstado(1);
+                            mR.setIdTramitador("s");
+                            mR.setFechaRealizado(momento());
+                            g1_movimiento.actualizarMovimiento(dbMovimientos, mR);
+                            c.setSaldo((c.getSaldo()+m.getMonto()));
+                            g1_usuario.actualizarUsuario(sistemaCC, c);  
+                            JOptionPane.showMessageDialog(null, mR.toString()+"\n"
+                                    + "Aplicacion terminada");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null,"No se ha aplicado el movimiento");
+                }
+                continuar = false;
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null,"Debe ingresar un valor entero");
+            }catch(IndexOutOfBoundsException e){
+                JOptionPane.showMessageDialog(null,"Ha seleccionado un elemento no disponible");
+            }
+        }while(continuar);
+        
+        
+    }
+     
+      private String momento(){
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        int day = now.getDayOfMonth();
+        int hour = now.getHour();
+        int minute = now.getMinute();
+        int second = now.getSecond();
+        int millis = now.get(ChronoField.MILLI_OF_SECOND);
+        
+        String salida = String.valueOf(day)+"-"
+                + String.valueOf(month)+"-"
+                + String.valueOf(year)+"  "
+                + String.valueOf(hour)+":"
+                + String.valueOf(minute)+":"
+                + String.valueOf(millis);
+        
+        return salida;
     }
 }

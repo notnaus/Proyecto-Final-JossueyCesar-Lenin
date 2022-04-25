@@ -73,10 +73,9 @@ public class g1_movimiento {
         String tipo="";
         String estado="";
         switch(getTipo()){
-            case 1: tipo = "Deposito - Abono a la cuenta";break;
-            case 2: tipo = "Nota de Credito";break;
-            case 3: tipo = "Trasferencia otros bancos";break;
-            case 4: tipo = "Retiro de dinero - Nota de credito";break;
+            case 1: tipo = "Nota de Credito";break;
+            case 2: tipo = "Abono a la cuenta";break;
+            case 3: tipo = "Nota de debito";
         }
         switch(getEstado()){
             case 0: estado = "Pendiente";break;
@@ -100,6 +99,27 @@ public class g1_movimiento {
         }
         return listaMovimientosPendientes;
     }
+    
+    public static ArrayList listaMovimientosPendientesTramitador(ArrayList dbMovimientos){
+        ArrayList<g1_movimiento> listaMovimientosPendientes = new ArrayList();
+        
+        for (int i = 0; i<dbMovimientos.size();i++){
+            g1_movimiento temporal = (g1_movimiento)dbMovimientos.get(i);
+            if(temporal.getEstado()==0 && temporal.getTipo() != 3){
+                listaMovimientosPendientes.add(temporal);
+            }
+        }
+        return listaMovimientosPendientes;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public static g1_movimiento getMovimiento(ArrayList dbMovimientos, int id){
         for (int i = 0; i<dbMovimientos.size();i++){
             g1_movimiento temporal = (g1_movimiento)dbMovimientos.get(i);
@@ -117,10 +137,9 @@ public class g1_movimiento {
         for (int i = 0; i<Movimientos.size();i++){
             g1_movimiento temporal = (g1_movimiento)Movimientos.get(i);
             switch(temporal.getTipo()){
-                case 1: tipo = "Deposito - Abono a la cuenta";break;
-                case 2: tipo = "Nota de Credito";break;
-                case 3: tipo = "Trasferencia otros bancos";break;
-                case 4: tipo = "Retiro de dinero - Nota de credito";break;
+                case 1: tipo = "Nota de Credito";break;
+                case 2: tipo = "Abono a la cuenta";break;
+                case 3: tipo = "Nota de debito";
             }
             switch(temporal.getEstado()){
                 case 0: estado = "Pendiente";break;
@@ -151,10 +170,10 @@ public class g1_movimiento {
             if(temporal.idCliente.equals(cedula)){
                 indice++;
                 switch(temporal.getTipo()){
-                case 1: tipo = "Deposito - Abono a cuenta";break;
-                case 2: tipo = "Nota de Credito";break;
-                case 3: tipo = "Trasferencia otros bancos - No vale";break;
-                case 4: tipo = "Retiro de dinero - Nota de Credito";break;
+                case 1: tipo = "Nota de Credito";break;
+                case 2: tipo = "Abono a la cuenta";break;
+                case 3: tipo = "Nota de debito";break;
+                
                 }
                 switch(temporal.getEstado()){
                     case 0: estado = "Pendiente";break;
